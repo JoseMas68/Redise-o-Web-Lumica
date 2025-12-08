@@ -14,17 +14,22 @@ import { MainLayout } from "@/components/layout/main-layout";
 import { motion, useScroll, useTransform, useInView, AnimatePresence } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
 
-// Componente para animaciones al entrar en viewport
+// Componente para animaciones al entrar en viewport - optimizado para móvil
 function AnimatedSection({ children, className = "", delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const isInView = useInView(ref, { once: true, margin: "-50px", amount: 0.3 });
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    setIsMobile(window.innerWidth < 768);
+  }, []);
   
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, y: 50 }}
-      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
-      transition={{ duration: 0.6, delay, ease: "easeOut" }}
+      initial={{ opacity: 0, y: isMobile ? 20 : 50 }}
+      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: isMobile ? 20 : 50 }}
+      transition={{ duration: isMobile ? 0.4 : 0.6, delay, ease: "easeOut" }}
       className={className}
     >
       {children}
@@ -32,12 +37,18 @@ function AnimatedSection({ children, className = "", delay = 0 }: { children: Re
   );
 }
 
-// Componente Card con efecto 3D
+// Componente Card con efecto 3D - deshabilitado en móvil para mejor rendimiento
 function Card3D({ children, className = "" }: { children: React.ReactNode; className?: string }) {
   const [rotateX, setRotateX] = useState(0);
   const [rotateY, setRotateY] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    setIsMobile(window.innerWidth < 768);
+  }, []);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (isMobile) return;
     const card = e.currentTarget;
     const rect = card.getBoundingClientRect();
     const x = e.clientX - rect.left;
@@ -52,6 +63,7 @@ function Card3D({ children, className = "" }: { children: React.ReactNode; class
   };
 
   const handleMouseLeave = () => {
+    if (isMobile) return;
     setRotateX(0);
     setRotateY(0);
   };
@@ -62,8 +74,8 @@ function Card3D({ children, className = "" }: { children: React.ReactNode; class
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       style={{
-        transform: `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`,
-        transition: "transform 0.1s ease-out"
+        transform: isMobile ? 'none' : `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`,
+        transition: isMobile ? 'none' : "transform 0.1s ease-out"
       }}
     >
       {children}

@@ -120,6 +120,28 @@
     @apply border-border outline-ring/50;
   }
   
+  /* Optimizaciones de rendimiento para móvil */
+  @media (max-width: 768px) {
+    * {
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    
+    /* Reducir blur en móvil para mejor rendimiento */
+    .blur-3xl {
+      filter: blur(40px) !important;
+    }
+    
+    .blur-2xl {
+      filter: blur(30px) !important;
+    }
+    
+    /* Optimizar animaciones en móvil */
+    * {
+      will-change: auto !important;
+    }
+  }
+  
   html {
     scroll-behavior: smooth;
     scroll-padding-top: 5rem;
@@ -240,5 +262,25 @@
 @media (min-width: 1536px) {
   .container {
     max-width: 1400px;
+  }
+}
+
+/* Optimización de rendimiento global */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Mejoras de rendimiento para scroll */
+html {
+  scroll-behavior: smooth;
+}
+
+@media (max-width: 768px) {
+  html {
+    -webkit-tap-highlight-color: transparent;
   }
 }
