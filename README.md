@@ -1,33 +1,95 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Lumicawebdesign - Proyecto Web
 
-## Getting Started
+Proyecto de rediseño completo de la web de **Lumicawebdesign**, agencia de diseño web y marketing digital.
 
-First, run the development server:
+## 🚀 Inicio Rápido
+
+### Instalación
+
+```bash
+npm install
+```
+
+### Desarrollo
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Abre [http://localhost:3000](http://localhost:3000) en tu navegador.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Build para Producción
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run build
+npm start
+```
 
-## Learn More
+## 📦 Stack Tecnológico
 
-To learn more about Next.js, take a look at the following resources:
+- **Framework**: Next.js 15 (App Router) con Turbopack
+- **Lenguaje**: TypeScript
+- **Estilos**: Tailwind CSS v4
+- **Componentes UI**: shadcn/ui
+- **Fuentes**: Inter (sans), Poppins (display)
+- **Iconos**: Lucide React
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🎨 Colores Corporativos
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- **Naranja Principal**: `#fca32d`
+- **Azul Secundario**: `#0344d4`
+
+## 📁 Estructura del Proyecto
+
+```
+lumicaweb/
+├── app/                    # App Router de Next.js
+│   ├── page.tsx           # Página de inicio
+│   ├── layout.tsx         # Layout principal
+│   └── globals.css        # Estilos globales
+├── components/            # Componentes React
+│   ├── layout/           # Header, Footer, MainLayout
+│   └── ui/               # Componentes shadcn/ui
+├── lib/                  # Utilidades
+├── public/               # Archivos estáticos
+│   └── images/          # Imágenes
+└── docs/                # Documentación (en carpeta raíz)
+```
+
+## 🛠️ Componentes Instalados (shadcn/ui)
+
+- Button, Card, Input, Textarea, Label
+- Form, Accordion, Badge, Carousel
+- Dialog, Separator, Avatar
+- Navigation Menu, Sheet
+
+## 📝 Páginas Planificadas
+
+1. **Inicio** (`/`) - ✅ En desarrollo
+2. **Servicios** (`/servicios`) - Pendiente
+3. **Portfolio** (`/portfolio`) - Pendiente
+4. **Sobre Nosotros** (`/sobre-nosotros`) - Pendiente
+5. **Contacto** (`/contacto`) - Pendiente
+
+## 🔗 Documentación Completa
+
+Ver carpeta `../docs/` en la raíz del proyecto:
+- [README.md](../docs/README.md) - Descripción general
+- [PLANIFICACION.md](../docs/PLANIFICACION.md) - Cronograma
+- [REQUISITOS.md](../docs/REQUISITOS.md) - Especificaciones
+- [ESTRUCTURA.md](../docs/ESTRUCTURA.md) - Contenidos
+- [ESTILOS.md](../docs/ESTILOS.md) - Guía de diseño
+
+## 📞 Contacto
+
+- **Teléfono**: 624 237 696
+- **Email**: info@lumicawebdesign.com
+- **Web Actual**: https://lumicawebdesign.com
+
+---
+
+**Estado**: ✅ Setup completado | 🚧 Desarrollo en curso
+**Fecha**: 8 de diciembre de 2025
 
 ## Deploy on Vercel
 
