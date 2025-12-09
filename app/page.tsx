@@ -97,12 +97,58 @@ export default function Home() {
   const [currentWord, setCurrentWord] = useState(0);
   const rotatingWords = ["impactante", "profesional", "moderna", "única", "perfecta"];
 
+  // Estado del formulario
+  const [formStatus, setFormStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
+  const [formMessage, setFormMessage] = useState('');
+
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentWord((prev) => (prev + 1) % rotatingWords.length);
     }, 3000);
     return () => clearInterval(interval);
   }, []);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setFormStatus('sending');
+    setFormMessage('');
+
+    const formData = new FormData(e.currentTarget);
+    const data = {
+      name: formData.get('name'),
+      email: formData.get('email'),
+      phone: formData.get('phone'),
+      message: formData.get('message'),
+    };
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        setFormStatus('success');
+        setFormMessage(result.message);
+        (e.target as HTMLFormElement).reset();
+      } else {
+        setFormStatus('error');
+        setFormMessage(result.error || 'Error al enviar el mensaje');
+      }
+    } catch (error) {
+      setFormStatus('error');
+      setFormMessage('Error de conexión. Por favor, inténtalo de nuevo.');
+    }
+
+    // Limpiar mensaje después de 5 segundos
+    setTimeout(() => {
+      setFormStatus('idle');
+      setFormMessage('');
+    }, 5000);
+  };
 
   const services = [
     {
@@ -146,9 +192,9 @@ export default function Home() {
   const projects = [
     {
       title: "Llavors.net",
-      description: "E-commerce de productos ecológicos con diseño sostenible",
+      description: "Escuela infantil consciente con pedagogía respetuosa y diseño cálido",
       image: "/images/mockup-llavors.png",
-      tags: ["E-commerce", "Ecológico", "WordPress"],
+      tags: ["Educación", "Infantil", "WordPress"],
       link: "https://llavors.net/"
     },
     {
@@ -689,6 +735,99 @@ export default function Home() {
           </AnimatedSection>
         </div>
 
+        {/* Tech Stack Section */}
+        <div className="container mx-auto px-4 mt-32">
+          <AnimatedSection className="text-center mb-16">
+            <Badge variant="outline" className="mb-4">Tecnologías</Badge>
+            <h3 className="text-3xl md:text-4xl font-bold mb-4">
+              Herramientas que{" "}
+              <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+                dominamos
+              </span>
+            </h3>
+            <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+              Utilizamos las tecnologías más modernas y confiables del mercado
+            </p>
+          </AnimatedSection>
+
+          <div className="grid gap-8 max-w-6xl mx-auto">
+            {/* Desarrollo Web */}
+            <AnimatedSection>
+              <Card className="p-8 border-2 hover:border-primary/50 transition-all">
+                <h4 className="text-xl font-bold mb-6 flex items-center gap-2">
+                  <Code2 className="w-6 h-6 text-primary" />
+                  Desarrollo Web
+                </h4>
+                <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
+                  {[
+                    { name: 'WordPress', icon: '🔷' },
+                    { name: 'React', icon: '⚛️' },
+                    { name: 'Next.js', icon: '▲' },
+                    { name: 'Angular', icon: '🅰️' },
+                    { name: 'Node.js', icon: '💚' },
+                    { name: 'TypeScript', icon: '💙' },
+                  ].map((tech, index) => (
+                    <div key={tech.name} className="flex flex-col items-center gap-2 p-4 rounded-lg hover:bg-primary/5 transition-all group">
+                      <div className="text-4xl group-hover:scale-110 transition-transform">{tech.icon}</div>
+                      <span className="text-sm font-medium text-center">{tech.name}</span>
+                    </div>
+                  ))}
+                </div>
+              </Card>
+            </AnimatedSection>
+
+            {/* Backend & Bases de Datos */}
+            <AnimatedSection delay={0.1}>
+              <Card className="p-8 border-2 hover:border-secondary/50 transition-all">
+                <h4 className="text-xl font-bold mb-6 flex items-center gap-2">
+                  <Layers className="w-6 h-6 text-secondary" />
+                  Backend & Datos
+                </h4>
+                <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
+                  {[
+                    { name: 'Python', icon: '🐍' },
+                    { name: 'PHP', icon: '🐘' },
+                    { name: 'MySQL', icon: '🗄️' },
+                    { name: 'PostgreSQL', icon: '🐘' },
+                    { name: 'MongoDB', icon: '🍃' },
+                    { name: 'Firebase', icon: '🔥' },
+                  ].map((tech, index) => (
+                    <div key={tech.name} className="flex flex-col items-center gap-2 p-4 rounded-lg hover:bg-secondary/5 transition-all group">
+                      <div className="text-4xl group-hover:scale-110 transition-transform">{tech.icon}</div>
+                      <span className="text-sm font-medium text-center">{tech.name}</span>
+                    </div>
+                  ))}
+                </div>
+              </Card>
+            </AnimatedSection>
+
+            {/* Diseño & Creatividad */}
+            <AnimatedSection delay={0.2}>
+              <Card className="p-8 border-2 hover:border-primary/50 transition-all">
+                <h4 className="text-xl font-bold mb-6 flex items-center gap-2">
+                  <Palette className="w-6 h-6 text-primary" />
+                  Diseño & Creatividad
+                </h4>
+                <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
+                  {[
+                    { name: 'Figma', icon: '🎨' },
+                    { name: 'Canva', icon: '✨' },
+                    { name: 'Adobe XD', icon: '🔶' },
+                    { name: 'Photoshop', icon: '🖼️' },
+                    { name: 'Illustrator', icon: '🎭' },
+                    { name: 'Premiere', icon: '🎬' },
+                  ].map((tech, index) => (
+                    <div key={tech.name} className="flex flex-col items-center gap-2 p-4 rounded-lg hover:bg-primary/5 transition-all group">
+                      <div className="text-4xl group-hover:scale-110 transition-transform">{tech.icon}</div>
+                      <span className="text-sm font-medium text-center">{tech.name}</span>
+                    </div>
+                  ))}
+                </div>
+              </Card>
+            </AnimatedSection>
+          </div>
+        </div>
+
         {/* Google Reviews Section */}
         <div className="container mx-auto px-4 mt-24">
           <AnimatedSection className="text-center mb-12">
@@ -867,40 +1006,51 @@ export default function Home() {
           <div className="grid lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
             <AnimatedSection>
               <Card className="p-8 border-2">
-                <form className="space-y-6">
+                <form className="space-y-6" onSubmit={handleSubmit}>
                   <div className="grid md:grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="name">Nombre *</Label>
-                      <Input id="name" placeholder="Tu nombre" required />
+                      <Input id="name" name="name" placeholder="Tu nombre" required />
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="email">Email *</Label>
-                      <Input id="email" type="email" placeholder="tu@email.com" required />
+                      <Input id="email" name="email" type="email" placeholder="tu@email.com" required />
                     </div>
                   </div>
                   
                   <div className="space-y-2">
                     <Label htmlFor="phone">Teléfono</Label>
-                    <Input id="phone" type="tel" placeholder="+34 600 000 000" />
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <Label htmlFor="subject">Asunto *</Label>
-                    <Input id="subject" placeholder="¿En qué te podemos ayudar?" required />
+                    <Input id="phone" name="phone" type="tel" placeholder="+34 600 000 000" />
                   </div>
                   
                   <div className="space-y-2">
                     <Label htmlFor="message">Mensaje *</Label>
                     <Textarea 
-                      id="message" 
+                      id="message"
+                      name="message" 
                       placeholder="Cuéntanos sobre tu proyecto..." 
                       rows={6}
                       required 
                     />
                   </div>
 
-                  <Button type="submit" size="lg" className="w-full group">
-                    Enviar mensaje
+                  {formMessage && (
+                    <div className={`p-4 rounded-lg ${
+                      formStatus === 'success' 
+                        ? 'bg-green-50 dark:bg-green-900/20 text-green-800 dark:text-green-200 border border-green-200 dark:border-green-800' 
+                        : 'bg-red-50 dark:bg-red-900/20 text-red-800 dark:text-red-200 border border-red-200 dark:border-red-800'
+                    }`}>
+                      {formMessage}
+                    </div>
+                  )}
+
+                  <Button 
+                    type="submit" 
+                    size="lg" 
+                    className="w-full group" 
+                    disabled={formStatus === 'sending'}
+                  >
+                    {formStatus === 'sending' ? 'Enviando...' : 'Enviar mensaje'}
                     <Send className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
                   </Button>
                 </form>

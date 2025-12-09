@@ -144,14 +144,14 @@ export function Footer() {
               </Link>
               <span>|</span>
               <Link
-                href="/politica-privacidad"
+                href="/privacidad"
                 className="hover:text-primary transition-colors"
               >
                 Privacidad
               </Link>
               <span>|</span>
               <Link
-                href="/politica-cookies"
+                href="/cookies"
                 className="hover:text-primary transition-colors"
               >
                 Cookies
