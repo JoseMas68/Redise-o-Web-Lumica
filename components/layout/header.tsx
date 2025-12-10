@@ -173,7 +173,7 @@ export function Header() {
                   <button
                     key={item.name}
                     onClick={() => handleNavClick(item.href)}
-                    className="text-lg font-medium text-foreground bg-gray-50 dark:bg-black text-left transition-all hover:text-primary hover:bg-primary/10 cursor-pointer py-4 px-5 rounded-xl active:bg-primary/20 group flex items-center justify-between"
+                    className="text-lg font-medium text-foreground bg-white dark:bg-black text-left transition-all hover:text-primary hover:bg-primary/10 cursor-pointer py-4 px-5 rounded-xl active:bg-primary/20 group flex items-center justify-between"
                   >
                     <span>{item.name}</span>
                     <ArrowRight className="h-5 w-5 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
