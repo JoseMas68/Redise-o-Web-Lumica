@@ -491,10 +491,7 @@ export default function Home() {
                             className={`aspect-square bg-gradient-to-br ${item.color} rounded-xl flex items-center justify-center shadow-lg`}
                             whileHover={{ scale: 1.1, rotate: 5 }}
                             animate={{ y: [0, -8, 0] }}
-                            transition={{ 
-                              hover: { type: "spring", stiffness: 300 },
-                              y: { duration: 3 + i, repeat: Infinity }
-                            }}
+                            transition={{ y: { duration: 3 + i, repeat: Infinity } }}
                           >
                             <Icon className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
                           </motion.div>
