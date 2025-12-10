@@ -269,16 +269,33 @@ export default function Home() {
           }}
         />
 
-        {/* Floating elements - solo desktop */}
+        {/* Animated gradient mesh - móvil mejorado */}
         <motion.div
-          className="absolute top-32 left-10 w-20 h-20 bg-primary/10 rounded-full blur-xl hidden md:block"
-          animate={{ y: [0, -20, 0], x: [0, 10, 0] }}
+          className="absolute inset-0"
+          style={{
+            background: "radial-gradient(circle at 20% 30%, rgba(252, 163, 45, 0.15) 0%, transparent 40%), radial-gradient(circle at 80% 70%, rgba(99, 102, 241, 0.1) 0%, transparent 40%)"
+          }}
+          animate={{
+            backgroundPosition: ["0% 0%", "100% 100%"],
+          }}
+          transition={{ duration: 15, repeat: Infinity, repeatType: "reverse" }}
+        />
+
+        {/* Floating elements - adaptado para móvil */}
+        <motion.div
+          className="absolute top-20 left-5 w-16 h-16 md:w-20 md:h-20 bg-primary/10 rounded-full blur-xl"
+          animate={{ y: [0, -15, 0], x: [0, 8, 0], scale: [1, 1.1, 1] }}
           transition={{ duration: 5, repeat: Infinity }}
         />
         <motion.div
-          className="absolute bottom-32 right-10 w-32 h-32 bg-secondary/10 rounded-full blur-xl hidden md:block"
-          animate={{ y: [0, 20, 0], x: [0, -10, 0] }}
+          className="absolute bottom-20 right-5 w-24 h-24 md:w-32 md:h-32 bg-secondary/10 rounded-full blur-xl"
+          animate={{ y: [0, 15, 0], x: [0, -8, 0], scale: [1, 0.9, 1] }}
           transition={{ duration: 7, repeat: Infinity }}
+        />
+        <motion.div
+          className="absolute top-1/2 left-1/2 w-32 h-32 md:w-48 md:h-48 bg-blue-500/5 rounded-full blur-3xl hidden sm:block"
+          animate={{ rotate: 360 }}
+          transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
         />
         
         <motion.div 
@@ -358,9 +375,9 @@ export default function Home() {
                 </Button>
               </motion.div>
 
-              {/* Stats */}
+              {/* Stats con animación mejorada */}
               <motion.div
-                className="grid grid-cols-3 gap-4 md:gap-6 pt-6 md:pt-8 max-w-md md:max-w-lg mx-auto lg:mx-0"
+                className="grid grid-cols-3 gap-3 md:gap-6 pt-6 md:pt-8 max-w-md md:max-w-lg mx-auto lg:mx-0 px-4 sm:px-0"
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.7, delay: 0.8 }}
@@ -372,74 +389,139 @@ export default function Home() {
                 ].map((stat, i) => (
                   <motion.div
                     key={i}
-                    className="text-center"
-                    whileHover={{ scale: 1.05 }}
+                    className="text-center p-3 md:p-4 rounded-xl bg-primary/5 backdrop-blur-sm border border-primary/10 hover:border-primary/30 transition-all"
+                    whileHover={{ scale: 1.05, backgroundColor: "rgba(252, 163, 45, 0.15)" }}
                     transition={{ type: "spring", stiffness: 300 }}
                   >
                     <div className="text-2xl sm:text-3xl md:text-4xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent mb-0.5 md:mb-1">
                       {stat.number}
                     </div>
-                    <div className="text-xs md:text-sm text-muted-foreground">{stat.label}</div>
+                    <div className="text-xs md:text-sm text-muted-foreground font-medium">{stat.label}</div>
+                  </motion.div>
+                ))}
+              </motion.div>
+
+              {/* Feature highlights - móvil mejorado */}
+              <motion.div
+                className="flex flex-wrap gap-2 md:gap-3 pt-6 md:pt-8 justify-center lg:justify-start px-4 sm:px-0"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.7, delay: 1 }}
+              >
+                {["Diseño Responsivo", "SEO Optimizado", "Rápido", "Seguro"].map((feature, i) => (
+                  <motion.div
+                    key={i}
+                    className="flex items-center gap-1.5 px-3 md:px-4 py-1.5 md:py-2 bg-primary/10 rounded-full text-xs md:text-sm font-semibold text-primary border border-primary/20"
+                    whileHover={{ scale: 1.05, backgroundColor: "rgba(252, 163, 45, 0.2)" }}
+                  >
+                    <CheckCircle2 className="w-3.5 h-3.5 md:w-4 md:h-4" />
+                    {feature}
                   </motion.div>
                 ))}
               </motion.div>
             </div>
 
-            {/* Right side - Illustration/Image */}
+            {/* Right side - Interactive Illustration */}
             <motion.div
-              className="relative hidden lg:block"
+              className="relative w-full flex items-center justify-center px-4 sm:px-0"
               initial={{ opacity: 0, x: 50 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, delay: 0.3 }}
             >
-              <div className="relative">
-                {/* Browser mockup */}
-                <div className="relative bg-card border-2 border-border rounded-2xl shadow-2xl overflow-hidden">
+              <div className="relative w-full max-w-md lg:max-w-lg">
+                {/* Animated gradient background */}
+                <motion.div
+                  className="absolute inset-0 rounded-3xl bg-gradient-to-br from-primary/20 via-secondary/10 to-blue-500/10 blur-2xl"
+                  animate={{
+                    scale: [1, 1.1, 1],
+                    rotate: [0, 5, -5, 0],
+                  }}
+                  transition={{ duration: 6, repeat: Infinity }}
+                />
+
+                {/* Main visual content - Browser mockup mejorado */}
+                <motion.div
+                  className="relative bg-card border border-border rounded-3xl shadow-2xl overflow-hidden"
+                  whileHover={{ y: -10 }}
+                  transition={{ type: "spring", stiffness: 300 }}
+                >
                   {/* Browser bar */}
-                  <div className="bg-muted border-b border-border px-4 py-3 flex items-center gap-2">
+                  <div className="bg-muted/50 backdrop-blur-sm border-b border-border px-4 py-3 flex items-center gap-2">
                     <div className="flex gap-2">
-                      <div className="w-3 h-3 rounded-full bg-red-500" />
-                      <div className="w-3 h-3 rounded-full bg-yellow-500" />
-                      <div className="w-3 h-3 rounded-full bg-green-500" />
+                      <motion.div className="w-3 h-3 rounded-full bg-red-500" animate={{ scale: [1, 1.2, 1] }} transition={{ duration: 2, repeat: Infinity }} />
+                      <motion.div className="w-3 h-3 rounded-full bg-yellow-500" animate={{ scale: [1, 1.2, 1] }} transition={{ duration: 2, repeat: Infinity, delay: 0.2 }} />
+                      <motion.div className="w-3 h-3 rounded-full bg-green-500" animate={{ scale: [1, 1.2, 1] }} transition={{ duration: 2, repeat: Infinity, delay: 0.4 }} />
                     </div>
-                    <div className="flex-1 bg-background rounded px-3 py-1 text-xs text-muted-foreground ml-4">
-                      lumicawebdesign.com
+                    <div className="flex-1 bg-background/50 rounded px-3 py-1 text-xs text-muted-foreground ml-4 font-mono">
+                      lumica.design
                     </div>
                   </div>
                   
-                  {/* Content */}
-                  <div className="p-8 bg-gradient-to-br from-primary/5 via-background to-secondary/5">
+                  {/* Content con animaciones */}
+                  <div className="p-6 sm:p-8 bg-gradient-to-br from-primary/5 via-background to-secondary/5 min-h-[280px] sm:min-h-[320px] flex flex-col justify-between">
                     <div className="space-y-4">
-                      <div className="h-8 bg-gradient-to-r from-primary/30 to-secondary/30 rounded-lg w-3/4 animate-pulse" />
-                      <div className="h-4 bg-muted rounded w-full" />
-                      <div className="h-4 bg-muted rounded w-5/6" />
-                      <div className="grid grid-cols-3 gap-4 mt-8">
-                        {[1, 2, 3].map((i) => (
-                          <div key={i} className="aspect-square bg-gradient-to-br from-primary/20 to-secondary/20 rounded-xl flex items-center justify-center">
-                            <Code2 className="w-8 h-8 text-primary" />
-                          </div>
-                        ))}
-                      </div>
+                      <motion.div
+                        className="h-8 bg-gradient-to-r from-primary/40 to-secondary/40 rounded-lg w-3/4"
+                        animate={{ opacity: [0.5, 1, 0.5] }}
+                        transition={{ duration: 2, repeat: Infinity }}
+                      />
+                      <motion.div
+                        className="h-4 bg-muted rounded w-full"
+                        animate={{ opacity: [0.3, 0.7, 0.3] }}
+                        transition={{ duration: 3, repeat: Infinity, delay: 0.2 }}
+                      />
+                      <motion.div
+                        className="h-4 bg-muted rounded w-5/6"
+                        animate={{ opacity: [0.3, 0.7, 0.3] }}
+                        transition={{ duration: 3, repeat: Infinity, delay: 0.4 }}
+                      />
+                    </div>
+                    
+                    {/* Interactive elements grid */}
+                    <div className="grid grid-cols-3 gap-3 mt-6">
+                      {[
+                        { icon: Code2, color: "from-blue-500 to-blue-600" },
+                        { icon: Palette, color: "from-pink-500 to-rose-600" },
+                        { icon: Zap, color: "from-yellow-500 to-orange-600" }
+                      ].map((item, i) => {
+                        const Icon = item.icon;
+                        return (
+                          <motion.div
+                            key={i}
+                            className={`aspect-square bg-gradient-to-br ${item.color} rounded-xl flex items-center justify-center shadow-lg`}
+                            whileHover={{ scale: 1.1, rotate: 5 }}
+                            animate={{ y: [0, -8, 0] }}
+                            transition={{ 
+                              hover: { type: "spring", stiffness: 300 },
+                              y: { duration: 3 + i, repeat: Infinity }
+                            }}
+                          >
+                            <Icon className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
+                          </motion.div>
+                        );
+                      })}
                     </div>
                   </div>
-                </div>
+                </motion.div>
 
-                {/* Floating badges */}
+                {/* Floating feature badges */}
                 <motion.div
-                  className="absolute -top-6 -right-6 bg-card border-2 border-primary/50 rounded-2xl px-4 py-2 shadow-xl"
-                  animate={{ y: [0, -10, 0] }}
+                  className="absolute -top-4 -right-4 md:-top-6 md:-right-6 bg-card border-2 border-primary/50 rounded-2xl px-3 md:px-4 py-2 shadow-xl"
+                  animate={{ y: [0, -12, 0] }}
                   transition={{ duration: 3, repeat: Infinity }}
+                  whileHover={{ scale: 1.05 }}
                 >
                   <div className="flex items-center gap-2">
-                    <Zap className="w-5 h-5 text-primary" />
-                    <span className="text-sm font-semibold">Rápido</span>
+                    <Zap className="w-4 h-4 md:w-5 md:h-5 text-primary" />
+                    <span className="text-xs md:text-sm font-semibold">Rápido</span>
                   </div>
                 </motion.div>
 
                 <motion.div
-                  className="absolute -bottom-6 -left-6 bg-card border-2 border-secondary/50 rounded-2xl px-4 py-2 shadow-xl"
-                  animate={{ y: [0, 10, 0] }}
+                  className="absolute -bottom-4 -left-4 md:-bottom-6 md:-left-6 bg-card border-2 border-secondary/50 rounded-2xl px-3 md:px-4 py-2 shadow-xl"
+                  animate={{ y: [0, 12, 0] }}
                   transition={{ duration: 4, repeat: Infinity }}
+                  whileHover={{ scale: 1.05 }}
                 >
                   <div className="flex items-center gap-2">
                     <Shield className="w-5 h-5 text-secondary" />
