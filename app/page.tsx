@@ -961,7 +961,7 @@ export default function Home() {
           {/* Link to all reviews */}
           <AnimatedSection delay={0.4} className="text-center mt-8">
             <Button variant="outline" asChild>
-              <a href="https://www.google.com/maps/place/?q=place_id:ChIJq08921917706464688482&reviews" target="_blank" rel="noopener noreferrer">
+              <a href="https://www.google.com/maps/search/Lumica+diseño+web" target="_blank" rel="noopener noreferrer">
                 Ver todas las reseñas en Google
                 <ExternalLink className="ml-2 h-4 w-4" />
               </a>
@@ -1117,7 +1117,7 @@ export default function Home() {
                     <div>
                       <h3 className="font-bold text-lg mb-2">Ubicación</h3>
                       <p className="text-muted-foreground">
-                        Valencia, España
+                        Vila-real, Castellón
                       </p>
                       <p className="text-sm text-muted-foreground mt-1">Trabajamos remoto en toda España</p>
                     </div>
