@@ -62,12 +62,20 @@ export function Header() {
         {/* Logo */}
         <Link href="/" className="flex items-center space-x-2">
           <Image
-            src="/images/logo-web.webp"
+            src="/logo_light.png"
             alt="Lumica Web Design"
             width={360}
             height={90}
             priority
-            className="h-24 md:h-28 w-auto dark:brightness-0 dark:invert"
+            className="h-24 md:h-28 w-auto hidden dark:inline-block"
+          />
+          <Image
+            src="/logo_dark.png"
+            alt="Lumica Web Design"
+            width={360}
+            height={90}
+            priority
+            className="h-24 md:h-28 w-auto dark:hidden"
           />
         </Link>
 
