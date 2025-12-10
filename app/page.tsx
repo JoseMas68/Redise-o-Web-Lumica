@@ -961,7 +961,7 @@ export default function Home() {
           {/* Link to all reviews */}
           <AnimatedSection delay={0.4} className="text-center mt-8">
             <Button variant="outline" asChild>
-              <a href="https://www.google.com/search?q=Lumica%20Dise%C3%B1o%20Web%20Rese%C3%B1as&rflfq=1&num=20&stick=H4sIAAAAAAAAAONgkxIxNDUzMrY0NjQxMTAxMTU1MDQ3MtnAyPiKUdqnNDczOVHBJbM49fDGfIXw1CSFoFQQO7F4ESs-WQDFT5jCVwAAAA&rldimm=15623931440445501724&tbm=lcl&cs=1&hl=es&sa=X&ved=0CCIQ9fQKKABqFwoTCKCktty1s5EDFQAAAAAdAAAAABAG&biw=1920&bih=919&dpr=1#lkt=LocalPoiReviews" target="_blank" rel="noopener noreferrer">
+              <a href="https://www.google.com/maps/place/?q=place_id:ChIJq08921917706464688482&reviews" target="_blank" rel="noopener noreferrer">
                 Ver todas las reseñas en Google
                 <ExternalLink className="ml-2 h-4 w-4" />
               </a>
