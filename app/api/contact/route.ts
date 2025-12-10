@@ -1,23 +1,71 @@
 import { NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
 
+// Validación de entrada más robusta
+function sanitizeInput(input: string, maxLength: number = 1000): string {
+  if (typeof input !== 'string') return '';
+  return input
+    .trim()
+    .slice(0, maxLength)
+    .replace(/[<>]/g, ''); // Remover caracteres peligrosos
+}
+
+// Validación de email según RFC 5322 simplificado
+function isValidEmail(email: string): boolean {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const domainRegex = /^[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,}$/i;
+  const parts = email.split('@');
+  return emailRegex.test(email) && parts.length === 2 && domainRegex.test(parts[1]);
+}
+
+// Validación de teléfono
+function isValidPhone(phone: string): boolean {
+  return /^[\d\s\-\+\(\)]{7,20}$/.test(phone);
+}
+
 export async function POST(request: Request) {
   try {
-    const { name, email, phone, message } = await request.json();
+    const body = await request.json();
+    const { name, email, phone, message } = body;
 
-    // Validaciones básicas
-    if (!name || !email || !message) {
+    // Sanitizar entradas
+    const sanitizedName = sanitizeInput(name as string, 100);
+    const sanitizedEmail = (email as string)?.toLowerCase().trim() || '';
+    const sanitizedPhone = phone ? sanitizeInput(phone as string, 20) : '';
+    const sanitizedMessage = sanitizeInput(message as string, 5000);
+
+    // Validaciones
+    if (!sanitizedName || !sanitizedEmail || !sanitizedMessage) {
       return NextResponse.json(
         { error: 'Por favor completa todos los campos obligatorios' },
         { status: 400 }
       );
     }
 
-    // Validar email
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
+    if (sanitizedName.length < 2) {
+      return NextResponse.json(
+        { error: 'El nombre debe tener al menos 2 caracteres' },
+        { status: 400 }
+      );
+    }
+
+    if (!isValidEmail(sanitizedEmail)) {
       return NextResponse.json(
         { error: 'Por favor ingresa un email válido' },
+        { status: 400 }
+      );
+    }
+
+    if (sanitizedPhone && !isValidPhone(sanitizedPhone)) {
+      return NextResponse.json(
+        { error: 'Por favor ingresa un teléfono válido' },
+        { status: 400 }
+      );
+    }
+
+    if (sanitizedMessage.length < 10) {
+      return NextResponse.json(
+        { error: 'El mensaje debe tener al menos 10 caracteres' },
         { status: 400 }
       );
     }
@@ -31,25 +79,27 @@ export async function POST(request: Request) {
       );
     }
 
-    // Configurar el transportador de nodemailer
+    // Configurar el transportador de nodemailer con validación segura
     const transporter = nodemailer.createTransport({
       host: process.env.SMTP_HOST || 'smtp.gmail.com',
       port: parseInt(process.env.SMTP_PORT || '587'),
-      secure: false, // true para 465, false para otros puertos
+      secure: process.env.SMTP_PORT === '465', // Usar TLS automáticamente si es 465
       auth: {
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASS,
       },
       tls: {
-        rejectUnauthorized: false
-      }
+        rejectUnauthorized: true // Validar certificados en producción
+      },
+      connectionTimeout: 5000,
+      socketTimeout: 5000
     });
 
     // Contenido del email
     const mailOptions = {
       from: process.env.SMTP_USER,
       to: process.env.CONTACT_EMAIL || process.env.SMTP_USER,
-      subject: `Nueva consulta de ${name} - Lumica Web Design`,
+      subject: `Nueva consulta de ${sanitizedName} - Lumica Web Design`,
       html: `
         <!DOCTYPE html>
         <html>
@@ -61,7 +111,7 @@ export async function POST(request: Request) {
             .content { background: #f9f9f9; padding: 30px; border-radius: 0 0 8px 8px; }
             .field { margin-bottom: 20px; }
             .label { font-weight: bold; color: #0344d4; display: block; margin-bottom: 5px; }
-            .value { background: white; padding: 10px; border-radius: 4px; border-left: 3px solid #fca32d; }
+            .value { background: white; padding: 10px; border-radius: 4px; border-left: 3px solid #fca32d; word-wrap: break-word; }
             .footer { text-align: center; margin-top: 20px; color: #666; font-size: 12px; }
           </style>
         </head>
@@ -74,21 +124,21 @@ export async function POST(request: Request) {
             <div class="content">
               <div class="field">
                 <span class="label">👤 Nombre:</span>
-                <div class="value">${name}</div>
+                <div class="value">${sanitizedName}</div>
               </div>
               <div class="field">
                 <span class="label">✉️ Email:</span>
-                <div class="value"><a href="mailto:${email}">${email}</a></div>
+                <div class="value"><a href="mailto:${sanitizedEmail}">${sanitizedEmail}</a></div>
               </div>
-              ${phone ? `
+              ${sanitizedPhone ? `
               <div class="field">
                 <span class="label">📱 Teléfono:</span>
-                <div class="value"><a href="tel:${phone}">${phone}</a></div>
+                <div class="value"><a href="tel:${sanitizedPhone}">${sanitizedPhone}</a></div>
               </div>
               ` : ''}
               <div class="field">
                 <span class="label">💬 Mensaje:</span>
-                <div class="value">${message.replace(/\n/g, '<br>')}</div>
+                <div class="value">${sanitizedMessage.replace(/\n/g, '<br>')}</div>
               </div>
               <div class="footer">
                 <p>Este mensaje fue enviado desde el formulario de contacto de web.lumicawebdesign.com</p>
@@ -99,12 +149,12 @@ export async function POST(request: Request) {
         </html>
       `,
       text: `
-Nueva consulta de: ${name}
-Email: ${email}
-${phone ? `Teléfono: ${phone}` : ''}
+Nueva consulta de: ${sanitizedName}
+Email: ${sanitizedEmail}
+${sanitizedPhone ? `Teléfono: ${sanitizedPhone}` : ''}
 
 Mensaje:
-${message}
+${sanitizedMessage}
       `,
     };
 
