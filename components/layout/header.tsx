@@ -3,12 +3,10 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useState, useEffect } from "react";
-import { Menu, ArrowRight } from "lucide-react";
+import { Menu, X, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { usePathname } from "next/navigation";
-import { motion } from "framer-motion";
 
 const navigation = [
   { name: "Inicio", href: "#inicio" },
@@ -31,10 +29,33 @@ export function Header() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Bloquear scroll del body cuando el menú está abierto
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isOpen]);
+
+  const handleNavClick = (href: string) => {
+    const element = document.querySelector(href);
+    if (element) {
+      setIsOpen(false);
+      setTimeout(() => {
+        const offsetTop = element.getBoundingClientRect().top + window.pageYOffset - 80;
+        window.scrollTo({ top: offsetTop, behavior: 'smooth' });
+      }, 300);
+    }
+  };
+
   return (
-    <header className={`sticky top-0 z-50 w-full transition-all duration-300 ${
-      scrolled 
-        ? "bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80 shadow-sm border-b" 
+    <header className={`sticky top-0 z-[100] w-full transition-all duration-300 ${
+      scrolled
+        ? "bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80 shadow-sm border-b"
         : "bg-transparent"
     }`}>
       <div className="container flex h-20 items-center justify-between">
@@ -61,7 +82,10 @@ export function Header() {
                 onClick={(e) => {
                   e.preventDefault();
                   const element = document.querySelector(item.href);
-                  element?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                  if (element) {
+                    const offsetTop = element.getBoundingClientRect().top + window.pageYOffset - 80;
+                    window.scrollTo({ top: offsetTop, behavior: 'smooth' });
+                  }
                   setIsOpen(false);
                 }}
                 className={`text-base font-medium transition-all hover:text-primary relative group cursor-pointer ${
@@ -80,11 +104,14 @@ export function Header() {
         {/* CTA Button Desktop */}
         <div className="hidden md:flex md:items-center md:gap-2">
           <ThemeToggle />
-          <Button 
+          <Button
             className="shadow-md hover:shadow-lg transition-all"
             onClick={() => {
               const element = document.querySelector('#contacto');
-              element?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              if (element) {
+                const offsetTop = element.getBoundingClientRect().top + window.pageYOffset - 80;
+                window.scrollTo({ top: offsetTop, behavior: 'smooth' });
+              }
             }}
           >
             CONTACTA
@@ -94,68 +121,74 @@ export function Header() {
         {/* Mobile Menu */}
         <div className="flex items-center gap-2 md:hidden">
           <ThemeToggle />
-          <Sheet open={isOpen} onOpenChange={setIsOpen}>
-            <SheetTrigger asChild>
-              <Button variant="ghost" size="icon">
-                <Menu className="h-6 w-6" />
-                <span className="sr-only">Abrir menú</span>
-              </Button>
-            </SheetTrigger>
-            <SheetContent side="right" className="w-[320px] sm:w-[400px] p-0">
-              {/* Header del menú con botón cerrar personalizado */}
-              <div className="flex items-center justify-between p-6 border-b">
-                <h2 className="text-xl font-bold">Menú</h2>
-                <Button 
-                  variant="ghost" 
-                  size="icon"
-                  onClick={() => setIsOpen(false)}
-                  className="rounded-full hover:bg-primary/10 group"
-                >
-                  <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
-                  <span className="sr-only">Cerrar menú</span>
-                </Button>
-              </div>
-              
-              {/* Navegación */}
-              <nav className="flex flex-col gap-2 p-6">
-                {navigation.map((item, index) => (
-                  <motion.a
-                    key={item.name}
-                    href={item.href}
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: index * 0.1 }}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      const element = document.querySelector(item.href);
-                      element?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                      setIsOpen(false);
-                    }}
-                    className="text-lg font-medium transition-all hover:text-primary cursor-pointer py-3 px-4 rounded-lg hover:bg-primary/5 group flex items-center justify-between"
-                  >
-                    {item.name}
-                    <ArrowRight className="h-4 w-4 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
-                  </motion.a>
-                ))}
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: navigation.length * 0.1 }}
-                >
-                  <Button className="mt-6 w-full" size="lg" onClick={() => {
-                    const element = document.querySelector('#contacto');
-                    element?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    setIsOpen(false);
-                  }}>
-                    CONTACTA
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </Button>
-                </motion.div>
-              </nav>
-            </SheetContent>
-          </Sheet>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setIsOpen(!isOpen)}
+          >
+            {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            <span className="sr-only">Menú</span>
+          </Button>
         </div>
       </div>
+
+      {/* Menu móvil custom - fixed, independiente del scroll */}
+      {isOpen && (
+        <>
+          {/* Overlay */}
+          <div
+            className="fixed inset-0 bg-black/50 z-[98] md:hidden"
+            onClick={() => setIsOpen(false)}
+          />
+
+          {/* Panel del menú */}
+          <div className="fixed top-0 right-0 bottom-0 w-[320px] bg-white dark:bg-black z-[101] md:hidden shadow-2xl border-l">
+            {/* Header del menú */}
+            <div className="flex items-center justify-between p-6 border-b sticky top-0 bg-white dark:bg-black">
+              <h2 className="text-2xl font-bold bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent">
+                Menú
+              </h2>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setIsOpen(false)}
+              >
+                <X className="h-6 w-6" />
+              </Button>
+            </div>
+
+            {/* Contenedor con scroll */}
+            <div className="overflow-y-auto p-6 bg-white dark:bg-black" style={{ height: 'calc(100vh - 88px)' }}>
+              {/* Botones de navegación */}
+              <nav className="flex flex-col gap-3">
+                {navigation.map((item) => (
+                  <button
+                    key={item.name}
+                    onClick={() => handleNavClick(item.href)}
+                    className="text-lg font-medium text-foreground bg-gray-50 dark:bg-black text-left transition-all hover:text-primary hover:bg-primary/10 cursor-pointer py-4 px-5 rounded-xl active:bg-primary/20 group flex items-center justify-between"
+                  >
+                    <span>{item.name}</span>
+                    <ArrowRight className="h-5 w-5 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
+                  </button>
+                ))}
+
+                {/* Separador */}
+                <div className="my-4 border-t" />
+
+                {/* Botón CTA */}
+                <Button
+                  className="w-full py-6 text-base font-semibold shadow-lg hover:shadow-xl transition-all"
+                  size="lg"
+                  onClick={() => handleNavClick('#contacto')}
+                >
+                  CONTACTA CON NOSOTROS
+                  <ArrowRight className="ml-2 h-5 w-5" />
+                </Button>
+              </nav>
+            </div>
+          </div>
+        </>
+      )}
     </header>
   );
 }

@@ -125,20 +125,30 @@
     * {
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
+      /* Activar aceleración por hardware */
+      -webkit-transform: translateZ(0);
+      transform: translateZ(0);
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
     }
-    
+
     /* Reducir blur en móvil para mejor rendimiento */
     .blur-3xl {
-      filter: blur(40px) !important;
+      filter: blur(20px) !important;
     }
-    
+
     .blur-2xl {
-      filter: blur(30px) !important;
+      filter: blur(15px) !important;
     }
-    
+
     /* Optimizar animaciones en móvil */
     * {
       will-change: auto !important;
+    }
+
+    /* Scroll suave en iOS */
+    body {
+      -webkit-overflow-scrolling: touch;
     }
   }
   
@@ -188,6 +198,13 @@
   66% {
     transform: translate(-20px, 30px) scale(0.9);
     opacity: 0.9;
+  }
+}
+
+/* Desactivar animación de fondo en móvil */
+@media (max-width: 768px) {
+  body::before {
+    animation: none !important;
   }
 }
 

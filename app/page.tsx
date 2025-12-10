@@ -13,23 +13,24 @@ import Image from "next/image";
 import { MainLayout } from "@/components/layout/main-layout";
 import { motion, useScroll, useTransform, useInView, AnimatePresence } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
+import { TechIcon } from "@/components/tech-icons";
 
 // Componente para animaciones al entrar en viewport - optimizado para móvil
 function AnimatedSection({ children, className = "", delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-50px", amount: 0.3 });
+  const isInView = useInView(ref, { once: true, margin: "-30px", amount: 0.1 });
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     setIsMobile(window.innerWidth < 768);
   }, []);
-  
+
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, y: isMobile ? 20 : 50 }}
-      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: isMobile ? 20 : 50 }}
-      transition={{ duration: isMobile ? 0.4 : 0.6, delay, ease: "easeOut" }}
+      initial={{ opacity: 0, y: isMobile ? 10 : 30 }}
+      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: isMobile ? 10 : 30 }}
+      transition={{ duration: isMobile ? 0.3 : 0.5, delay, ease: [0.25, 0.1, 0.25, 1] }}
       className={className}
     >
       {children}
@@ -257,25 +258,25 @@ export default function Home() {
   return (
     <MainLayout>
       {/* Hero Section with Parallax */}
-      <section id="inicio" ref={heroRef} className="relative min-h-screen flex items-center justify-center overflow-hidden pt-24 md:pt-20">
+      <section id="inicio" ref={heroRef} className="relative min-h-[90vh] md:min-h-screen flex items-center justify-center overflow-hidden pt-20 md:pt-20 pb-12 md:pb-0">
         {/* Animated Background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-background to-secondary/20" />
-        <motion.div 
-          className="absolute inset-0"
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-background to-secondary/10" />
+        <motion.div
+          className="absolute inset-0 hidden md:block"
           style={{
-            backgroundImage: "radial-gradient(circle at 50% 50%, rgba(252, 163, 45, 0.15) 0%, transparent 50%)",
+            backgroundImage: "radial-gradient(circle at 50% 50%, rgba(252, 163, 45, 0.12) 0%, transparent 50%)",
             scale: heroScale
           }}
         />
-        
-        {/* Floating elements */}
+
+        {/* Floating elements - solo desktop */}
         <motion.div
-          className="absolute top-32 left-10 w-20 h-20 bg-primary/10 rounded-full blur-xl"
+          className="absolute top-32 left-10 w-20 h-20 bg-primary/10 rounded-full blur-xl hidden md:block"
           animate={{ y: [0, -20, 0], x: [0, 10, 0] }}
           transition={{ duration: 5, repeat: Infinity }}
         />
         <motion.div
-          className="absolute bottom-32 right-10 w-32 h-32 bg-secondary/10 rounded-full blur-xl"
+          className="absolute bottom-32 right-10 w-32 h-32 bg-secondary/10 rounded-full blur-xl hidden md:block"
           animate={{ y: [0, 20, 0], x: [0, -10, 0] }}
           transition={{ duration: 7, repeat: Infinity }}
         />
@@ -284,28 +285,28 @@ export default function Home() {
           className="container relative z-10 mx-auto px-4"
           style={{ opacity: heroOpacity }}
         >
-          <div className="grid lg:grid-cols-2 gap-12 items-center max-w-7xl mx-auto">
+          <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center max-w-7xl mx-auto">
             {/* Left side - Text content */}
-            <div className="space-y-8 text-center lg:text-left">
+            <div className="space-y-6 md:space-y-8 text-center lg:text-left">
               <motion.div
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.5 }}
               >
-                <Badge variant="secondary" className="text-sm px-6 py-2 mb-6 shadow-lg">
-                  <Rocket className="w-4 h-4 mr-2" />
+                <Badge variant="secondary" className="text-xs md:text-sm px-4 md:px-6 py-1.5 md:py-2 shadow-lg">
+                  <Rocket className="w-3 h-3 md:w-4 md:h-4 mr-1.5 md:mr-2" />
                   Diseño Web Profesional
                 </Badge>
               </motion.div>
-              
+
               <motion.div
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.7, delay: 0.2 }}
               >
-                <h1 className="text-5xl md:text-6xl lg:text-7xl font-display font-extrabold tracking-tight leading-tight">
+                <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-display font-extrabold tracking-tight leading-[1.1]">
                   Tu web{" "}
-                  <div className="inline-block min-w-[280px] lg:min-w-[320px]">
+                  <div className="inline-block min-w-[200px] sm:min-w-[240px] md:min-w-[280px] lg:min-w-[320px]">
                     <AnimatePresence mode="wait">
                       <motion.span
                         key={currentWord}
@@ -319,36 +320,37 @@ export default function Home() {
                       </motion.span>
                     </AnimatePresence>
                   </div>
-                  <br />
+                  <br className="hidden sm:block" />
+                  <span className="sm:hidden"> </span>
                   empieza aquí
                 </h1>
               </motion.div>
-              
-              <motion.p 
-                className="text-lg md:text-xl text-muted-foreground leading-relaxed max-w-xl mx-auto lg:mx-0"
+
+              <motion.p
+                className="text-base md:text-lg lg:text-xl text-muted-foreground leading-relaxed max-w-xl mx-auto lg:mx-0 px-4 sm:px-0"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.7, delay: 0.4 }}
               >
                 Diseño moderno, desarrollo profesional y resultados reales. Creamos experiencias digitales que convierten visitantes en clientes.
               </motion.p>
-              
-              <motion.div 
-                className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start items-center"
+
+              <motion.div
+                className="flex flex-col sm:flex-row gap-3 md:gap-4 justify-center lg:justify-start items-stretch sm:items-center px-4 sm:px-0"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.7, delay: 0.6 }}
               >
-                <Button asChild size="lg" className="text-lg px-10 py-7 shadow-2xl hover:shadow-primary/50 transition-all group hover:scale-105">
+                <Button asChild size="lg" className="text-base md:text-lg px-6 md:px-10 py-6 md:py-7 shadow-2xl hover:shadow-primary/50 transition-all group hover:scale-105 w-full sm:w-auto">
                   <a href="#contacto" onClick={(e) => {
                     e.preventDefault();
                     document.querySelector('#contacto')?.scrollIntoView({ behavior: 'smooth' });
                   }}>
                     Empieza tu proyecto
-                    <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-2 transition-transform" />
+                    <ArrowRight className="ml-2 h-4 w-4 md:h-5 md:w-5 group-hover:translate-x-2 transition-transform" />
                   </a>
                 </Button>
-                <Button asChild size="lg" variant="outline" className="text-lg px-10 py-7 hover:scale-105 transition-transform">
+                <Button asChild size="lg" variant="outline" className="text-base md:text-lg px-6 md:px-10 py-6 md:py-7 hover:scale-105 transition-transform w-full sm:w-auto">
                   <a href="#portfolio" onClick={(e) => {
                     e.preventDefault();
                     document.querySelector('#portfolio')?.scrollIntoView({ behavior: 'smooth' });
@@ -357,8 +359,8 @@ export default function Home() {
               </motion.div>
 
               {/* Stats */}
-              <motion.div 
-                className="grid grid-cols-3 gap-6 pt-8 max-w-lg mx-auto lg:mx-0"
+              <motion.div
+                className="grid grid-cols-3 gap-4 md:gap-6 pt-6 md:pt-8 max-w-md md:max-w-lg mx-auto lg:mx-0"
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.7, delay: 0.8 }}
@@ -368,13 +370,13 @@ export default function Home() {
                   { number: "100%", label: "Satisfacción" },
                   { number: "24/7", label: "Soporte" }
                 ].map((stat, i) => (
-                  <motion.div 
+                  <motion.div
                     key={i}
                     className="text-center"
                     whileHover={{ scale: 1.05 }}
                     transition={{ type: "spring", stiffness: 300 }}
                   >
-                    <div className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent mb-1">
+                    <div className="text-2xl sm:text-3xl md:text-4xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent mb-0.5 md:mb-1">
                       {stat.number}
                     </div>
                     <div className="text-xs md:text-sm text-muted-foreground">{stat.label}</div>
@@ -449,14 +451,14 @@ export default function Home() {
           </div>
         </motion.div>
 
-        {/* Scroll Indicator */}
+        {/* Scroll Indicator - solo desktop */}
         <motion.div
-          className="absolute bottom-8 left-1/2 -translate-x-1/2"
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 hidden md:flex"
           animate={{ y: [0, 10, 0] }}
           transition={{ duration: 2, repeat: Infinity }}
         >
           <div className="w-6 h-10 border-2 border-primary rounded-full flex items-start justify-center p-2">
-            <motion.div 
+            <motion.div
               className="w-1 h-3 bg-primary rounded-full"
               animate={{ y: [0, 16, 0] }}
               transition={{ duration: 2, repeat: Infinity }}
@@ -736,41 +738,47 @@ export default function Home() {
         </div>
 
         {/* Tech Stack Section */}
-        <div className="container mx-auto px-4 mt-32">
+        <div className="container mx-auto px-4 mt-32 mb-32">
           <AnimatedSection className="text-center mb-16">
             <Badge variant="outline" className="mb-4">Tecnologías</Badge>
-            <h3 className="text-3xl md:text-4xl font-bold mb-4">
-              Herramientas que{" "}
+            <h3 className="text-3xl md:text-5xl font-display font-bold mb-4">
+              Stack tecnológico{" "}
               <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-                dominamos
+                profesional
               </span>
             </h3>
-            <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-              Utilizamos las tecnologías más modernas y confiables del mercado
+            <p className="text-muted-foreground text-lg max-w-3xl mx-auto">
+              Las herramientas más modernas y confiables del mercado para garantizar calidad y rendimiento
             </p>
           </AnimatedSection>
 
-          <div className="grid gap-8 max-w-6xl mx-auto">
+          <div className="grid gap-12 max-w-7xl mx-auto">
             {/* Desarrollo Web */}
             <AnimatedSection>
-              <Card className="p-8 border-2 hover:border-primary/50 transition-all">
-                <h4 className="text-xl font-bold mb-6 flex items-center gap-2">
-                  <Code2 className="w-6 h-6 text-primary" />
-                  Desarrollo Web
-                </h4>
-                <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
+              <Card className="p-10 border-2 border-primary/10 hover:border-primary/50 hover:shadow-2xl transition-all duration-300 group">
+                <div className="flex items-center gap-3 mb-8">
+                  <div className="p-2.5 bg-gradient-to-br from-primary/20 to-primary/10 rounded-lg group-hover:from-primary/30 group-hover:to-primary/20 transition-all">
+                    <Code2 className="w-6 h-6 text-primary" />
+                  </div>
+                  <h4 className="text-2xl font-bold">Desarrollo Frontend</h4>
+                </div>
+                <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-6">
                   {[
-                    { name: 'WordPress', icon: '🔷' },
-                    { name: 'React', icon: '⚛️' },
-                    { name: 'Next.js', icon: '▲' },
-                    { name: 'Angular', icon: '🅰️' },
-                    { name: 'Node.js', icon: '💚' },
-                    { name: 'TypeScript', icon: '💙' },
-                  ].map((tech, index) => (
-                    <div key={tech.name} className="flex flex-col items-center gap-2 p-4 rounded-lg hover:bg-primary/5 transition-all group">
-                      <div className="text-4xl group-hover:scale-110 transition-transform">{tech.icon}</div>
-                      <span className="text-sm font-medium text-center">{tech.name}</span>
-                    </div>
+                    { name: 'WordPress', key: 'wordpress' as const },
+                    { name: 'React', key: 'react' as const },
+                    { name: 'Next.js', key: 'nextjs' as const },
+                    { name: 'Angular', key: 'angular' as const },
+                    { name: 'Node.js', key: 'nodejs' as const },
+                    { name: 'TypeScript', key: 'typescript' as const },
+                  ].map((tech) => (
+                    <AnimatedSection key={tech.name} delay={0.05}>
+                      <div className="flex flex-col items-center gap-3 p-4 rounded-xl hover:bg-primary/5 transition-all duration-300 group/tech cursor-pointer">
+                        <div className="w-14 h-14 rounded-lg overflow-hidden shadow-md group-hover/tech:shadow-lg transition-all group-hover/tech:scale-110">
+                          <TechIcon name={tech.key} className="w-full h-full" />
+                        </div>
+                        <span className="text-sm font-semibold text-center text-foreground group-hover/tech:text-primary transition-colors">{tech.name}</span>
+                      </div>
+                    </AnimatedSection>
                   ))}
                 </div>
               </Card>
@@ -778,24 +786,30 @@ export default function Home() {
 
             {/* Backend & Bases de Datos */}
             <AnimatedSection delay={0.1}>
-              <Card className="p-8 border-2 hover:border-secondary/50 transition-all">
-                <h4 className="text-xl font-bold mb-6 flex items-center gap-2">
-                  <Layers className="w-6 h-6 text-secondary" />
-                  Backend & Datos
-                </h4>
-                <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
+              <Card className="p-10 border-2 border-secondary/10 hover:border-secondary/50 hover:shadow-2xl transition-all duration-300 group">
+                <div className="flex items-center gap-3 mb-8">
+                  <div className="p-2.5 bg-gradient-to-br from-secondary/20 to-secondary/10 rounded-lg group-hover:from-secondary/30 group-hover:to-secondary/20 transition-all">
+                    <Layers className="w-6 h-6 text-secondary" />
+                  </div>
+                  <h4 className="text-2xl font-bold">Backend & Datos</h4>
+                </div>
+                <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-6">
                   {[
-                    { name: 'Python', icon: '🐍' },
-                    { name: 'PHP', icon: '🐘' },
-                    { name: 'MySQL', icon: '🗄️' },
-                    { name: 'PostgreSQL', icon: '🐘' },
-                    { name: 'MongoDB', icon: '🍃' },
-                    { name: 'Firebase', icon: '🔥' },
-                  ].map((tech, index) => (
-                    <div key={tech.name} className="flex flex-col items-center gap-2 p-4 rounded-lg hover:bg-secondary/5 transition-all group">
-                      <div className="text-4xl group-hover:scale-110 transition-transform">{tech.icon}</div>
-                      <span className="text-sm font-medium text-center">{tech.name}</span>
-                    </div>
+                    { name: 'Python', key: 'python' as const },
+                    { name: 'PHP', key: 'php' as const },
+                    { name: 'MySQL', key: 'mysql' as const },
+                    { name: 'PostgreSQL', key: 'postgresql' as const },
+                    { name: 'MongoDB', key: 'mongodb' as const },
+                    { name: 'Firebase', key: 'firebase' as const },
+                  ].map((tech) => (
+                    <AnimatedSection key={tech.name} delay={0.05}>
+                      <div className="flex flex-col items-center gap-3 p-4 rounded-xl hover:bg-secondary/5 transition-all duration-300 group/tech cursor-pointer">
+                        <div className="w-14 h-14 rounded-lg overflow-hidden shadow-md group-hover/tech:shadow-lg transition-all group-hover/tech:scale-110">
+                          <TechIcon name={tech.key} className="w-full h-full" />
+                        </div>
+                        <span className="text-sm font-semibold text-center text-foreground group-hover/tech:text-secondary transition-colors">{tech.name}</span>
+                      </div>
+                    </AnimatedSection>
                   ))}
                 </div>
               </Card>
@@ -803,24 +817,30 @@ export default function Home() {
 
             {/* Diseño & Creatividad */}
             <AnimatedSection delay={0.2}>
-              <Card className="p-8 border-2 hover:border-primary/50 transition-all">
-                <h4 className="text-xl font-bold mb-6 flex items-center gap-2">
-                  <Palette className="w-6 h-6 text-primary" />
-                  Diseño & Creatividad
-                </h4>
-                <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
+              <Card className="p-10 border-2 border-primary/10 hover:border-primary/50 hover:shadow-2xl transition-all duration-300 group">
+                <div className="flex items-center gap-3 mb-8">
+                  <div className="p-2.5 bg-gradient-to-br from-primary/20 to-primary/10 rounded-lg group-hover:from-primary/30 group-hover:to-primary/20 transition-all">
+                    <Palette className="w-6 h-6 text-primary" />
+                  </div>
+                  <h4 className="text-2xl font-bold">Diseño & Creatividad</h4>
+                </div>
+                <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-6">
                   {[
-                    { name: 'Figma', icon: '🎨' },
-                    { name: 'Canva', icon: '✨' },
-                    { name: 'Adobe XD', icon: '🔶' },
-                    { name: 'Photoshop', icon: '🖼️' },
-                    { name: 'Illustrator', icon: '🎭' },
-                    { name: 'Premiere', icon: '🎬' },
-                  ].map((tech, index) => (
-                    <div key={tech.name} className="flex flex-col items-center gap-2 p-4 rounded-lg hover:bg-primary/5 transition-all group">
-                      <div className="text-4xl group-hover:scale-110 transition-transform">{tech.icon}</div>
-                      <span className="text-sm font-medium text-center">{tech.name}</span>
-                    </div>
+                    { name: 'Figma', key: 'figma' as const },
+                    { name: 'Canva', key: 'canva' as const },
+                    { name: 'Adobe XD', key: 'adobexd' as const },
+                    { name: 'Photoshop', key: 'photoshop' as const },
+                    { name: 'Illustrator', key: 'illustrator' as const },
+                    { name: 'Premiere', key: 'premiere' as const },
+                  ].map((tech) => (
+                    <AnimatedSection key={tech.name} delay={0.05}>
+                      <div className="flex flex-col items-center gap-3 p-4 rounded-xl hover:bg-primary/5 transition-all duration-300 group/tech cursor-pointer">
+                        <div className="w-14 h-14 rounded-lg overflow-hidden shadow-md group-hover/tech:shadow-lg transition-all group-hover/tech:scale-110">
+                          <TechIcon name={tech.key} className="w-full h-full" />
+                        </div>
+                        <span className="text-sm font-semibold text-center text-foreground group-hover/tech:text-primary transition-colors">{tech.name}</span>
+                      </div>
+                    </AnimatedSection>
                   ))}
                 </div>
               </Card>

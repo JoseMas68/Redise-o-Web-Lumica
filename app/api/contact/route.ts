@@ -13,6 +13,24 @@ export async function POST(request: Request) {
       );
     }
 
+    // Validar email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return NextResponse.json(
+        { error: 'Por favor ingresa un email válido' },
+        { status: 400 }
+      );
+    }
+
+    // Verificar que las variables de entorno estén configuradas
+    if (!process.env.SMTP_USER || !process.env.SMTP_PASS) {
+      console.error('Variables de entorno SMTP no configuradas');
+      return NextResponse.json(
+        { error: 'El servicio de email no está configurado. Por favor contacta directamente a info@lumicawebdesign.com' },
+        { status: 503 }
+      );
+    }
+
     // Configurar el transportador de nodemailer
     const transporter = nodemailer.createTransport({
       host: process.env.SMTP_HOST || 'smtp.gmail.com',
@@ -22,6 +40,9 @@ export async function POST(request: Request) {
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASS,
       },
+      tls: {
+        rejectUnauthorized: false
+      }
     });
 
     // Contenido del email
@@ -87,6 +108,9 @@ ${message}
       `,
     };
 
+    // Verificar conexión antes de enviar
+    await transporter.verify();
+
     // Enviar el email
     await transporter.sendMail(mailOptions);
 
@@ -96,8 +120,19 @@ ${message}
     );
   } catch (error) {
     console.error('Error al enviar email:', error);
+
+    // Error más específico
+    const errorMessage = error instanceof Error ? error.message : 'Error desconocido';
+
+    if (errorMessage.includes('auth') || errorMessage.includes('Invalid login')) {
+      return NextResponse.json(
+        { error: 'Error de autenticación del servidor de email. Por favor contacta a info@lumicawebdesign.com' },
+        { status: 500 }
+      );
+    }
+
     return NextResponse.json(
-      { error: 'Error al enviar el mensaje. Por favor, inténtalo de nuevo.' },
+      { error: 'Error al enviar el mensaje. Por favor, inténtalo de nuevo o contacta directamente a info@lumicawebdesign.com' },
       { status: 500 }
     );
   }
