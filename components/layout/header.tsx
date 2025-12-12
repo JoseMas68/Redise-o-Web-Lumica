@@ -164,16 +164,17 @@ export function Header() {
           >
             {/* Formas geométricas suaves y discretas */}
             <div className="absolute inset-0 overflow-hidden">
-              {/* Círculo decorativo arriba a la derecha */}
-              <div className="absolute -top-32 -right-32 w-64 h-64 bg-primary/5 rounded-full blur-3xl" />
+              {/* Círculo grande arriba a la derecha */}
+              <div className="absolute -top-24 -right-24 w-96 h-96 bg-primary/8 rounded-full blur-2xl" />
               
-              {/* Círculo decorativo abajo a la izquierda */}
-              <div className="absolute -bottom-32 -left-32 w-64 h-64 bg-blue-600/5 rounded-full blur-3xl" />
+              {/* Círculo mediano abajo a la izquierda */}
+              <div className="absolute -bottom-16 -left-16 w-80 h-80 bg-blue-600/8 rounded-full blur-2xl" />
               
-              {/* Línea diagonal sutil */}
-              <div className="absolute inset-0" style={{
-                background: `linear-gradient(135deg, transparent 48%, rgba(79, 172, 254, 0.03) 48%, rgba(79, 172, 254, 0.03) 52%, transparent 52%)`
-              }} />
+              {/* Rectángulo diagonal sutil arriba a la izquierda */}
+              <div className="absolute -top-40 -left-20 w-96 h-40 bg-primary/5 rounded-3xl blur-2xl transform -rotate-45" />
+              
+              {/* Cuadrado redondeado en el centro derecha */}
+              <div className="absolute top-1/3 right-0 w-72 h-72 bg-blue-600/5 rounded-3xl blur-2xl" />
             </div>
 
             {/* Contenedor flex que ocupa toda la altura */}
