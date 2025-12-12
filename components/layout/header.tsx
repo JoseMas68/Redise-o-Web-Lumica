@@ -53,12 +53,13 @@ export function Header() {
   };
 
   return (
-    <header className={`sticky top-0 z-[100] w-full transition-all duration-300 ${
-      scrolled
-        ? "bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80 shadow-sm border-b"
-        : "bg-transparent"
-    }`}>
-      <div className="container flex h-20 items-center justify-between">
+    <>
+      <header className={`sticky top-0 z-[100] w-full transition-all duration-300 ${
+        scrolled
+          ? "bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80 shadow-sm border-b"
+          : "bg-transparent"
+      }`}>
+        <div className="container flex h-20 items-center justify-between">
         {/* Logo */}
         <Link href="/" className="flex items-center space-x-2">
           <Image
@@ -139,6 +140,7 @@ export function Header() {
           </Button>
         </div>
       </div>
+    </header>
 
       {/* Menu móvil fullscreen - Moderno y elegante */}
       {isOpen && (
@@ -154,7 +156,7 @@ export function Header() {
 
           {/* Panel principal - Fullscreen */}
           <div 
-            className="fixed inset-0 z-[101] md:hidden overflow-hidden"
+            className="fixed top-0 left-0 right-0 bottom-0 z-[101] md:hidden overflow-hidden"
             style={{
               animation: 'slideInRight 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)'
             }}
@@ -287,6 +289,6 @@ export function Header() {
           `}</style>
         </>
       )}
-    </header>
+    </>
   );
 }
