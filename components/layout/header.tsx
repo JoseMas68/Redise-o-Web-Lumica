@@ -249,6 +249,7 @@ export function Header() {
                 </div>
               </div>
             </div>
+          </div>
 
           <style jsx>{`
             @keyframes slideInUp {
