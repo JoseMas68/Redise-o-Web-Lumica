@@ -140,17 +140,28 @@ export function Header() {
         </div>
       </div>
 
-      {/* Menu móvil lateral - Moderno con diseño mejorado */}
+      {/* Menu móvil fullscreen - Moderno sin scroll de página */}
       {isOpen && (
         <>
           {/* Overlay */}
           <div
             className="fixed inset-0 bg-black/50 z-[98] md:hidden backdrop-blur-sm"
             onClick={() => setIsOpen(false)}
+            style={{ top: 0, left: 0, right: 0, bottom: 0 }}
           />
 
-          {/* Panel del menú - Lateral derecha */}
-          <div className="fixed top-0 right-0 bottom-0 w-[320px] bg-white dark:bg-slate-950 z-[101] md:hidden shadow-2xl border-l overflow-hidden">
+          {/* Panel del menú - Fullscreen */}
+          <div 
+            className="fixed z-[101] md:hidden overflow-hidden bg-white dark:bg-slate-950 shadow-2xl"
+            style={{ 
+              top: 0, 
+              left: 0, 
+              right: 0, 
+              bottom: 0,
+              height: '100dvh',
+              width: '100%'
+            }}
+          >
             {/* Grid background decorativo */}
             <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-blue-500/5" />
             <div className="absolute inset-0" style={{
@@ -158,76 +169,86 @@ export function Header() {
               backgroundSize: '50px 50px'
             }} />
 
-            {/* Header del menú */}
-            <div className="relative flex items-center justify-between p-6 border-b border-primary/10 sticky top-0 bg-white/80 dark:bg-slate-950/80 backdrop-blur-sm z-10">
-              <div className="flex items-center gap-2">
-                <div className="p-2 bg-gradient-to-br from-primary to-blue-600 rounded-lg">
-                  <Sparkles className="h-4 w-4 text-white" />
+            {/* Contenedor flex que ocupa toda la altura */}
+            <div className="relative h-full w-full flex flex-col">
+              {/* Header del menú */}
+              <div className="relative flex items-center justify-between px-6 py-8 border-b border-primary/10 bg-white/80 dark:bg-slate-950/80 backdrop-blur-sm flex-shrink-0">
+                <div className="flex items-center gap-3">
+                  <div className="p-3 bg-gradient-to-br from-primary to-blue-600 rounded-xl">
+                    <Sparkles className="h-5 w-5 text-white" />
+                  </div>
+                  <h2 className="text-2xl font-bold bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent">
+                    Menú
+                  </h2>
                 </div>
-                <h2 className="text-xl font-bold bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent">
-                  Menú
-                </h2>
-              </div>
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => setIsOpen(false)}
-                className="hover:bg-primary/10 rounded-lg"
-              >
-                <X className="h-5 w-5" />
-              </Button>
-            </div>
-
-            {/* Contenedor con scroll */}
-            <div className="relative overflow-y-auto p-6" style={{ height: 'calc(100vh - 80px)' }}>
-              {/* Sección de navegación */}
-              <div className="mb-8">
-                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-4">Navegar</p>
-                <nav className="flex flex-col gap-2">
-                  {navigation.map((item, idx) => (
-                    <button
-                      key={item.name}
-                      onClick={() => handleNavClick(item.href)}
-                      className="group relative px-4 py-3 text-left rounded-lg transition-all duration-300 hover:bg-primary/10 active:bg-primary/20"
-                      style={{
-                        animation: `slideInUp 0.5s ease-out ${idx * 0.08}s backwards`
-                      }}
-                    >
-                      {/* Borde lateral animado */}
-                      <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-primary to-blue-600 rounded-l-lg opacity-0 group-hover:opacity-100 transition-all" />
-                      
-                      <div className="relative flex items-center justify-between">
-                        <span className="text-base font-semibold text-foreground group-hover:text-primary transition-colors">
-                          {item.name}
-                        </span>
-                        <ArrowRight className="h-4 w-4 text-primary opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-300" />
-                      </div>
-                    </button>
-                  ))}
-                </nav>
-              </div>
-
-              {/* Separador visual */}
-              <div className="my-6 h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
-
-              {/* Sección CTA */}
-              <div className="space-y-3">
-                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Acción</p>
                 <Button
-                  className="w-full py-5 text-sm font-semibold shadow-lg hover:shadow-xl transition-all bg-gradient-to-r from-primary to-blue-600 hover:shadow-primary/50"
-                  onClick={() => handleNavClick('#contacto')}
-                  style={{
-                    animation: 'slideInUp 0.5s ease-out 0.4s backwards'
-                  }}
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => setIsOpen(false)}
+                  className="hover:bg-primary/10 rounded-xl"
                 >
-                  <span className="flex items-center gap-2">
-                    Comienza Tu Proyecto
-                    <ArrowRight className="h-4 w-4" />
-                  </span>
+                  <X className="h-6 w-6" />
                 </Button>
               </div>
+
+              {/* Contenedor scrolleable - independiente */}
+              <div className="relative flex-1 overflow-y-auto px-6 py-8">
+                {/* Sección de navegación */}
+                <div className="mb-10">
+                  <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-6">Navegar</p>
+                  <nav className="flex flex-col gap-3">
+                    {navigation.map((item, idx) => (
+                      <button
+                        key={item.name}
+                        onClick={() => handleNavClick(item.href)}
+                        className="group relative px-6 py-4 text-left rounded-xl transition-all duration-300 hover:bg-primary/10 active:bg-primary/20"
+                        style={{
+                          animation: `slideInUp 0.5s ease-out ${idx * 0.08}s backwards`
+                        }}
+                      >
+                        {/* Borde lateral animado */}
+                        <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-gradient-to-b from-primary to-blue-600 rounded-l-xl opacity-0 group-hover:opacity-100 transition-all" />
+                        
+                        <div className="relative flex items-center justify-between">
+                          <span className="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
+                            {item.name}
+                          </span>
+                          <ArrowRight className="h-5 w-5 text-primary opacity-0 group-hover:opacity-100 group-hover:translate-x-2 transition-all duration-300" />
+                        </div>
+                      </button>
+                    ))}
+                  </nav>
+                </div>
+
+                {/* Separador visual */}
+                <div className="my-8 h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
+
+                {/* Sección CTA */}
+                <div className="space-y-4">
+                  <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">Acción</p>
+                  <Button
+                    className="w-full py-6 text-base font-semibold shadow-lg hover:shadow-xl transition-all bg-gradient-to-r from-primary to-blue-600 hover:shadow-primary/50"
+                    size="lg"
+                    onClick={() => handleNavClick('#contacto')}
+                    style={{
+                      animation: 'slideInUp 0.5s ease-out 0.4s backwards'
+                    }}
+                  >
+                    <span className="flex items-center gap-2">
+                      Comienza Tu Proyecto
+                      <ArrowRight className="h-5 w-5" />
+                    </span>
+                  </Button>
+                </div>
+
+                {/* Footer info */}
+                <div className="mt-12 pt-8 border-t border-primary/10">
+                  <p className="text-sm text-muted-foreground text-center">
+                    Listo para transformar tu presencia digital
+                  </p>
+                </div>
+              </div>
             </div>
-          </div>
 
           <style jsx>{`
             @keyframes slideInUp {
