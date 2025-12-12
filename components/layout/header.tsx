@@ -32,13 +32,26 @@ export function Header() {
   // Bloquear scroll del body cuando el menú está abierto
   useEffect(() => {
     if (isOpen) {
+      // Bloquear scroll de la página
       document.body.style.overflow = 'hidden';
+      document.documentElement.style.overflow = 'hidden';
+      
+      // Prevenir scroll en el documento
+      const preventScroll = (e: WheelEvent) => {
+        e.preventDefault();
+      };
+      
+      document.addEventListener('wheel', preventScroll, { passive: false });
+      
+      return () => {
+        document.removeEventListener('wheel', preventScroll);
+        document.body.style.overflow = 'unset';
+        document.documentElement.style.overflow = 'unset';
+      };
     } else {
       document.body.style.overflow = 'unset';
+      document.documentElement.style.overflow = 'unset';
     }
-    return () => {
-      document.body.style.overflow = 'unset';
-    };
   }, [isOpen]);
 
   const handleNavClick = (href: string) => {
@@ -156,9 +169,13 @@ export function Header() {
 
           {/* Panel principal - Fullscreen */}
           <div 
-            className="fixed top-0 left-0 right-0 bottom-0 z-[101] md:hidden overflow-hidden"
+            className="fixed inset-0 z-[101] md:hidden overflow-hidden"
             style={{
-              animation: 'slideInRight 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)'
+              animation: 'slideInRight 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0
             }}
           >
             {/* Grid background decorativo */}
@@ -192,8 +209,8 @@ export function Header() {
                 </Button>
               </div>
 
-              {/* Contenido scrolleable */}
-              <div className="overflow-y-auto flex-1 px-6 pb-8">
+              {/* Contenido scrolleable - independiente del scroll de página */}
+              <div className="overflow-y-auto flex-1 px-6 pb-8 touch-pan-x" style={{ WebkitOverflowScrolling: 'touch' }}>
                 {/* Sección de navegación */}
                 <div className="mb-12">
                   <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-6">Navegar</p>
