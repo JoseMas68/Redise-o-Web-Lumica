@@ -32,21 +32,48 @@ export function Header() {
   // Bloquear scroll del body cuando el menú está abierto
   useEffect(() => {
     if (isOpen) {
+      // Guardar scroll actual
+      const scrollPosition = window.scrollY;
+      
       // Bloquear scroll de la página
       document.body.style.overflow = 'hidden';
+      document.body.style.position = 'fixed';
+      document.body.style.width = '100%';
+      document.body.style.top = `-${scrollPosition}px`;
       document.documentElement.style.overflow = 'hidden';
       
-      // Prevenir scroll en el documento
-      const preventScroll = (e: WheelEvent) => {
+      // Prevenir todos los eventos de scroll
+      const preventScroll = (e: Event) => {
         e.preventDefault();
       };
       
-      document.addEventListener('wheel', preventScroll, { passive: false });
+      const preventWheel = (e: WheelEvent) => {
+        e.preventDefault();
+      };
+      
+      const preventTouch = (e: TouchEvent) => {
+        if ((e.target as HTMLElement)?.closest('.overflow-y-auto') === null) {
+          e.preventDefault();
+        }
+      };
+      
+      document.addEventListener('scroll', preventScroll, { passive: false });
+      document.addEventListener('wheel', preventWheel, { passive: false });
+      document.addEventListener('touchmove', preventTouch, { passive: false });
       
       return () => {
-        document.removeEventListener('wheel', preventScroll);
+        document.removeEventListener('scroll', preventScroll);
+        document.removeEventListener('wheel', preventWheel);
+        document.removeEventListener('touchmove', preventTouch);
+        
         document.body.style.overflow = 'unset';
+        document.body.style.position = 'unset';
+        document.body.style.width = 'unset';
+        document.body.style.top = 'unset';
         document.documentElement.style.overflow = 'unset';
+        
+        // Restaurar scroll
+        window.scrollTo(0, scrollPosition);
       };
     } else {
       document.body.style.overflow = 'unset';
