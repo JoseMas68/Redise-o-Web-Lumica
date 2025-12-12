@@ -773,7 +773,7 @@ export default function Home() {
                   <div className="flex flex-col items-center text-center space-y-4">
                     <div className="relative w-32 h-32 rounded-full overflow-hidden ring-4 ring-secondary/20 group-hover:ring-secondary/40 transition-all bg-gradient-to-br from-primary/10 to-secondary/10">
                       <Image
-                        src="/images/diana-avatar.svg"
+                        src="/images/avatar_diana.jpeg"
                         alt="Diana"
                         fill
                         className="object-cover p-2"

@@ -36,11 +36,18 @@ export function Footer() {
           <div className="space-y-4 text-center md:text-left">
             <a href="#inicio" onClick={(e) => handleClick(e, '#inicio')} className="inline-flex items-center space-x-2">
               <Image
-                src="/images/logo-web.webp"
+                src="/images/logo_light.png"
                 alt="Lumica Web Design"
                 width={300}
                 height={75}
-                className="h-20 w-auto dark:brightness-0 dark:invert"
+                className="h-20 w-auto dark:hidden"
+              />
+              <Image
+                src="/images/logo_dark.png"
+                alt="Lumica Web Design"
+                width={300}
+                height={75}
+                className="h-20 w-auto hidden dark:block"
               />
             </a>
             <p className="text-sm text-muted-foreground max-w-xs mx-auto md:mx-0">
