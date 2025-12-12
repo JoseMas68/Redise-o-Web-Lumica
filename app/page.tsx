@@ -590,7 +590,8 @@ export default function Home() {
               <h3 className="text-3xl md:text-4xl font-bold text-center mb-16">
                 Nuestro proceso de trabajo
               </h3>
-              <div className="grid md:grid-cols-3 gap-8">
+              {/* Desktop View - Grid */}
+              <div className="hidden md:grid grid-cols-3 gap-8">
                 {[
                   { step: "01", title: "Consulta", desc: "Analizamos tus necesidades y objetivos" },
                   { step: "02", title: "Diseño", desc: "Creamos mockups y prototipos visuales" },
@@ -607,6 +608,33 @@ export default function Home() {
                     <div className="text-7xl font-bold bg-gradient-to-br from-primary to-secondary bg-clip-text text-transparent mb-3">{item.step}</div>
                     <h4 className="text-xl font-bold mb-2">{item.title}</h4>
                     <p className="text-muted-foreground">{item.desc}</p>
+                  </motion.div>
+                ))}
+              </div>
+
+              {/* Mobile View - Vertical Timeline */}
+              <div className="md:hidden space-y-4">
+                {[
+                  { step: "01", title: "Consulta", desc: "Analizamos tus necesidades y objetivos" },
+                  { step: "02", title: "Diseño", desc: "Creamos mockups y prototipos visuales" },
+                  { step: "03", title: "Desarrollo", desc: "Construimos tu web con las mejores tecnologías" },
+                  { step: "04", title: "Pruebas", desc: "Testing exhaustivo en todos los dispositivos" },
+                  { step: "05", title: "Lanzamiento", desc: "Publicamos y optimizamos tu web" },
+                  { step: "06", title: "Soporte", desc: "Te acompañamos después del lanzamiento" }
+                ].map((item, i) => (
+                  <motion.div
+                    key={i}
+                    className="relative p-4 rounded-xl bg-muted/30 border border-primary/10 hover:border-primary/30 transition-all"
+                    whileHover={{ x: 4 }}
+                  >
+                    <div className="flex items-start gap-4">
+                      <div className="text-4xl font-bold bg-gradient-to-br from-primary to-secondary bg-clip-text text-transparent flex-shrink-0">{item.step}</div>
+                      <div className="flex-1">
+                        <h4 className="font-bold text-lg mb-1">{item.title}</h4>
+                        <p className="text-sm text-muted-foreground">{item.desc}</p>
+                      </div>
+                    </div>
+                    {i < 5 && <div className="absolute left-6 top-full w-0.5 h-4 bg-gradient-to-b from-primary/50 to-transparent" />}
                   </motion.div>
                 ))}
               </div>
@@ -771,12 +799,12 @@ export default function Home() {
               <AnimatedSection delay={0.2}>
                 <Card className="p-6 border-2 hover:border-primary/50 transition-all hover:shadow-xl group h-full">
                   <div className="flex flex-col items-center text-center space-y-4">
-                    <div className="relative w-32 h-32 rounded-full overflow-hidden ring-4 ring-secondary/20 group-hover:ring-secondary/40 transition-all bg-gradient-to-br from-primary/10 to-secondary/10">
+                    <div className="relative w-32 h-32 rounded-full overflow-hidden ring-4 ring-secondary/20 group-hover:ring-secondary/40 transition-all">
                       <Image
                         src="/images/avatar_diana.jpeg"
                         alt="Diana"
                         fill
-                        className="object-cover p-2"
+                        className="object-cover"
                       />
                     </div>
                     <div>
