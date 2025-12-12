@@ -39,3 +39,28 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Documentación temporal (análisis y auditoría)
+AUDITORIA_COMPLETADA.md
+AUDITORIA_DOCUMENTACION.md
+CHECKLIST_REORGANIZACION.md
+COMIENZA_AQUI.md
+GUIA_LECTURA.md
+INDICE_DOCUMENTOS.md
+MAPEO_DUPLICACIONES.md
+PLAN_IMPLEMENTACION.md
+RESUMEN_1PAGINA.md
+RESUMEN_AUDITORIA.md
+VISUALIZACION_ESTRUCTURA.md
+EJEMPLOS_CONTENIDO.md
+
+# Scripts temporales
+deploy-vps.ps1
+update-vps.ps1
+
+# Configuraciones temporales
+nginx-config.txt
+nginx-lumicaweb.conf
+deploy.md
+ecosystem.config.js
+
