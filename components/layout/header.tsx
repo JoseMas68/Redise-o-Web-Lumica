@@ -32,53 +32,13 @@ export function Header() {
   // Bloquear scroll del body cuando el menú está abierto
   useEffect(() => {
     if (isOpen) {
-      // Guardar scroll actual
-      const scrollPosition = window.scrollY;
-      
-      // Bloquear scroll de la página
       document.body.style.overflow = 'hidden';
-      document.body.style.position = 'fixed';
-      document.body.style.width = '100%';
-      document.body.style.top = `-${scrollPosition}px`;
-      document.documentElement.style.overflow = 'hidden';
-      
-      // Prevenir todos los eventos de scroll
-      const preventScroll = (e: Event) => {
-        e.preventDefault();
-      };
-      
-      const preventWheel = (e: WheelEvent) => {
-        e.preventDefault();
-      };
-      
-      const preventTouch = (e: TouchEvent) => {
-        if ((e.target as HTMLElement)?.closest('.overflow-y-auto') === null) {
-          e.preventDefault();
-        }
-      };
-      
-      document.addEventListener('scroll', preventScroll, { passive: false });
-      document.addEventListener('wheel', preventWheel, { passive: false });
-      document.addEventListener('touchmove', preventTouch, { passive: false });
-      
-      return () => {
-        document.removeEventListener('scroll', preventScroll);
-        document.removeEventListener('wheel', preventWheel);
-        document.removeEventListener('touchmove', preventTouch);
-        
-        document.body.style.overflow = 'unset';
-        document.body.style.position = 'unset';
-        document.body.style.width = 'unset';
-        document.body.style.top = 'unset';
-        document.documentElement.style.overflow = 'unset';
-        
-        // Restaurar scroll
-        window.scrollTo(0, scrollPosition);
-      };
     } else {
       document.body.style.overflow = 'unset';
-      document.documentElement.style.overflow = 'unset';
     }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
   }, [isOpen]);
 
   const handleNavClick = (href: string) => {
@@ -93,13 +53,12 @@ export function Header() {
   };
 
   return (
-    <>
-      <header className={`sticky top-0 z-[100] w-full transition-all duration-300 ${
-        scrolled
-          ? "bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80 shadow-sm border-b"
-          : "bg-transparent"
-      }`}>
-        <div className="container flex h-20 items-center justify-between">
+    <header className={`sticky top-0 z-[100] w-full transition-all duration-300 ${
+      scrolled
+        ? "bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80 shadow-sm border-b"
+        : "bg-transparent"
+    }`}>
+      <div className="container flex h-20 items-center justify-between">
         {/* Logo */}
         <Link href="/" className="flex items-center space-x-2">
           <Image
@@ -180,150 +139,101 @@ export function Header() {
           </Button>
         </div>
       </div>
-    </header>
 
-      {/* Menu móvil fullscreen - Moderno y elegante */}
+      {/* Menu móvil lateral - Moderno con diseño mejorado */}
       {isOpen && (
         <>
-          {/* Backdrop animado */}
+          {/* Overlay */}
           <div
-            className="fixed inset-0 bg-gradient-to-br from-black/60 via-black/40 to-black/20 z-[98] md:hidden backdrop-blur-sm"
+            className="fixed inset-0 bg-black/50 z-[98] md:hidden backdrop-blur-sm"
             onClick={() => setIsOpen(false)}
-            style={{
-              animation: 'fadeIn 0.3s ease-out'
-            }}
           />
 
-          {/* Panel principal - Fullscreen */}
-          <div 
-            className="fixed inset-0 z-[101] md:hidden overflow-hidden"
-            style={{
-              animation: 'slideInRight 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)',
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0
-            }}
-          >
+          {/* Panel del menú - Lateral derecha */}
+          <div className="fixed top-0 right-0 bottom-0 w-[320px] bg-white dark:bg-slate-950 z-[101] md:hidden shadow-2xl border-l overflow-hidden">
             {/* Grid background decorativo */}
-            <div className="absolute inset-0 bg-white dark:bg-slate-950">
-              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-blue-500/5" />
-              <div className="absolute inset-0" style={{
-                backgroundImage: 'linear-gradient(0deg, transparent 24%, rgba(79, 172, 254, 0.1) 25%, rgba(79, 172, 254, 0.1) 26%, transparent 27%, transparent 74%, rgba(79, 172, 254, 0.1) 75%, rgba(79, 172, 254, 0.1) 76%, transparent 77%, transparent), linear-gradient(90deg, transparent 24%, rgba(79, 172, 254, 0.1) 25%, rgba(79, 172, 254, 0.1) 26%, transparent 27%, transparent 74%, rgba(79, 172, 254, 0.1) 75%, rgba(79, 172, 254, 0.1) 76%, transparent 77%, transparent)',
-                backgroundSize: '50px 50px'
-              }} />
+            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-blue-500/5" />
+            <div className="absolute inset-0" style={{
+              backgroundImage: 'linear-gradient(0deg, transparent 24%, rgba(79, 172, 254, 0.1) 25%, rgba(79, 172, 254, 0.1) 26%, transparent 27%, transparent 74%, rgba(79, 172, 254, 0.1) 75%, rgba(79, 172, 254, 0.1) 76%, transparent 77%, transparent), linear-gradient(90deg, transparent 24%, rgba(79, 172, 254, 0.1) 25%, rgba(79, 172, 254, 0.1) 26%, transparent 27%, transparent 74%, rgba(79, 172, 254, 0.1) 75%, rgba(79, 172, 254, 0.1) 76%, transparent 77%, transparent)',
+              backgroundSize: '50px 50px'
+            }} />
+
+            {/* Header del menú */}
+            <div className="relative flex items-center justify-between p-6 border-b border-primary/10 sticky top-0 bg-white/80 dark:bg-slate-950/80 backdrop-blur-sm z-10">
+              <div className="flex items-center gap-2">
+                <div className="p-2 bg-gradient-to-br from-primary to-blue-600 rounded-lg">
+                  <Sparkles className="h-4 w-4 text-white" />
+                </div>
+                <h2 className="text-xl font-bold bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent">
+                  Menú
+                </h2>
+              </div>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setIsOpen(false)}
+                className="hover:bg-primary/10 rounded-lg"
+              >
+                <X className="h-5 w-5" />
+              </Button>
             </div>
 
-            {/* Contenido */}
-            <div className="relative h-full flex flex-col">
-              {/* Header con botón cerrar */}
-              <div className="flex items-center justify-between px-6 py-8 flex-shrink-0">
-                <div className="flex items-center gap-2">
-                  <div className="p-3 bg-gradient-to-br from-primary to-blue-600 rounded-xl">
-                    <Sparkles className="h-5 w-5 text-white" />
-                  </div>
-                  <h2 className="text-2xl font-bold bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent">
-                    Menú
-                  </h2>
-                </div>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => setIsOpen(false)}
-                  className="hover:bg-primary/10 rounded-xl"
-                >
-                  <X className="h-6 w-6" />
-                </Button>
+            {/* Contenedor con scroll */}
+            <div className="relative overflow-y-auto p-6" style={{ height: 'calc(100vh - 80px)' }}>
+              {/* Sección de navegación */}
+              <div className="mb-8">
+                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-4">Navegar</p>
+                <nav className="flex flex-col gap-2">
+                  {navigation.map((item, idx) => (
+                    <button
+                      key={item.name}
+                      onClick={() => handleNavClick(item.href)}
+                      className="group relative px-4 py-3 text-left rounded-lg transition-all duration-300 hover:bg-primary/10 active:bg-primary/20"
+                      style={{
+                        animation: `slideInUp 0.5s ease-out ${idx * 0.08}s backwards`
+                      }}
+                    >
+                      {/* Borde lateral animado */}
+                      <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-primary to-blue-600 rounded-l-lg opacity-0 group-hover:opacity-100 transition-all" />
+                      
+                      <div className="relative flex items-center justify-between">
+                        <span className="text-base font-semibold text-foreground group-hover:text-primary transition-colors">
+                          {item.name}
+                        </span>
+                        <ArrowRight className="h-4 w-4 text-primary opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-300" />
+                      </div>
+                    </button>
+                  ))}
+                </nav>
               </div>
 
-              {/* Contenido scrolleable - independiente del scroll de página */}
-              <div className="overflow-y-auto flex-1 px-6 pb-8 touch-pan-x" style={{ WebkitOverflowScrolling: 'touch' }}>
-                {/* Sección de navegación */}
-                <div className="mb-12">
-                  <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-6">Navegar</p>
-                  <nav className="flex flex-col gap-2">
-                    {navigation.map((item, idx) => (
-                      <button
-                        key={item.name}
-                        onClick={() => handleNavClick(item.href)}
-                        className="group relative px-6 py-4 text-left rounded-xl transition-all duration-300 hover:bg-primary/10 active:bg-primary/20"
-                        style={{
-                          animation: `slideInUp 0.5s ease-out ${idx * 0.08}s backwards`
-                        }}
-                      >
-                        {/* Fondo con gradient */}
-                        <div className="absolute inset-0 bg-gradient-to-r from-primary/0 to-primary/0 group-hover:from-primary/5 group-hover:to-blue-600/5 rounded-xl transition-all" />
-                        
-                        {/* Borde lateral animado */}
-                        <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-primary to-blue-600 rounded-l-xl opacity-0 group-hover:opacity-100 transition-all" />
-                        
-                        <div className="relative flex items-center justify-between">
-                          <span className="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
-                            {item.name}
-                          </span>
-                          <ArrowRight className="h-5 w-5 text-primary opacity-0 group-hover:opacity-100 group-hover:translate-x-2 transition-all duration-300" />
-                        </div>
-                      </button>
-                    ))}
-                  </nav>
-                </div>
+              {/* Separador visual */}
+              <div className="my-6 h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
 
-                {/* Separador visual */}
-                <div className="my-8 h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
-
-                {/* Sección CTA */}
-                <div className="space-y-4">
-                  <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">Acción</p>
-                  <Button
-                    className="w-full py-6 text-base font-semibold shadow-lg hover:shadow-xl transition-all bg-gradient-to-r from-primary to-blue-600 hover:shadow-primary/50"
-                    size="lg"
-                    onClick={() => handleNavClick('#contacto')}
-                    style={{
-                      animation: 'slideInUp 0.5s ease-out 0.4s backwards'
-                    }}
-                  >
-                    <span className="flex items-center gap-2">
-                      Comienza Tu Proyecto
-                      <ArrowRight className="h-5 w-5" />
-                    </span>
-                  </Button>
-                </div>
-
-                {/* Footer info */}
-                <div className="mt-12 pt-8 border-t border-primary/10">
-                  <p className="text-sm text-muted-foreground text-center">
-                    Listo para transformar tu presencia digital
-                  </p>
-                </div>
+              {/* Sección CTA */}
+              <div className="space-y-3">
+                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Acción</p>
+                <Button
+                  className="w-full py-5 text-sm font-semibold shadow-lg hover:shadow-xl transition-all bg-gradient-to-r from-primary to-blue-600 hover:shadow-primary/50"
+                  onClick={() => handleNavClick('#contacto')}
+                  style={{
+                    animation: 'slideInUp 0.5s ease-out 0.4s backwards'
+                  }}
+                >
+                  <span className="flex items-center gap-2">
+                    Comienza Tu Proyecto
+                    <ArrowRight className="h-4 w-4" />
+                  </span>
+                </Button>
               </div>
             </div>
           </div>
 
           <style jsx>{`
-            @keyframes fadeIn {
-              from {
-                opacity: 0;
-              }
-              to {
-                opacity: 1;
-              }
-            }
-
-            @keyframes slideInRight {
-              from {
-                opacity: 0;
-                transform: translateX(100%);
-              }
-              to {
-                opacity: 1;
-                transform: translateX(0);
-              }
-            }
-
             @keyframes slideInUp {
               from {
                 opacity: 0;
-                transform: translateY(20px);
+                transform: translateY(10px);
               }
               to {
                 opacity: 1;
@@ -333,6 +243,6 @@ export function Header() {
           `}</style>
         </>
       )}
-    </>
+    </header>
   );
 }
