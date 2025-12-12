@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useState, useEffect } from "react";
-import { Menu, X, ArrowRight, Sparkles } from "lucide-react";
+import { Menu, X, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { usePathname } from "next/navigation";
@@ -162,25 +162,27 @@ export function Header() {
               width: '100%'
             }}
           >
-            {/* Grid background decorativo */}
-            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-blue-500/5" />
-            <div className="absolute inset-0" style={{
-              backgroundImage: 'linear-gradient(0deg, transparent 24%, rgba(79, 172, 254, 0.1) 25%, rgba(79, 172, 254, 0.1) 26%, transparent 27%, transparent 74%, rgba(79, 172, 254, 0.1) 75%, rgba(79, 172, 254, 0.1) 76%, transparent 77%, transparent), linear-gradient(90deg, transparent 24%, rgba(79, 172, 254, 0.1) 25%, rgba(79, 172, 254, 0.1) 26%, transparent 27%, transparent 74%, rgba(79, 172, 254, 0.1) 75%, rgba(79, 172, 254, 0.1) 76%, transparent 77%, transparent)',
-              backgroundSize: '50px 50px'
-            }} />
+            {/* Formas geométricas suaves y discretas */}
+            <div className="absolute inset-0 overflow-hidden">
+              {/* Círculo decorativo arriba a la derecha */}
+              <div className="absolute -top-32 -right-32 w-64 h-64 bg-primary/5 rounded-full blur-3xl" />
+              
+              {/* Círculo decorativo abajo a la izquierda */}
+              <div className="absolute -bottom-32 -left-32 w-64 h-64 bg-blue-600/5 rounded-full blur-3xl" />
+              
+              {/* Línea diagonal sutil */}
+              <div className="absolute inset-0" style={{
+                background: `linear-gradient(135deg, transparent 48%, rgba(79, 172, 254, 0.03) 48%, rgba(79, 172, 254, 0.03) 52%, transparent 52%)`
+              }} />
+            </div>
 
             {/* Contenedor flex que ocupa toda la altura */}
             <div className="relative h-full w-full flex flex-col">
               {/* Header del menú */}
               <div className="relative flex items-center justify-between px-6 py-8 border-b border-primary/10 bg-white/80 dark:bg-slate-950/80 backdrop-blur-sm flex-shrink-0">
-                <div className="flex items-center gap-3">
-                  <div className="p-3 bg-gradient-to-br from-primary to-blue-600 rounded-xl">
-                    <Sparkles className="h-5 w-5 text-white" />
-                  </div>
-                  <h2 className="text-2xl font-bold bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent">
-                    Menú
-                  </h2>
-                </div>
+                <h2 className="text-2xl font-bold bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent">
+                  Menú
+                </h2>
                 <Button
                   variant="ghost"
                   size="icon"
